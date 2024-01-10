@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Home</title>
+</head>
+
+<body>
+    <header>
+        <h1>Mobile Paradise</h1>
+        <nav>
+            <ul>
+                <li><a class="active-page" href="index.html">Home</a></li>
+                <li><a href="login.html">Login/Signup</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="content">
+        <h2>Featured Mobiles</h2>
+        <div id="mobile-grid" class="mobile-grid">
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Mobile Paradise. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobilesContainer = document.getElementById('mobile-grid');
+
+            // Fetch mobiles data from the API
+            fetch('http://localhost:5000/api/mobiles')
+                .then(response => response.json())
+                .then(mobiles => {
+                    console.log(mobiles)
+                    mobiles.forEach(mobile => {
+                        const mobileCard = document.createElement('div');
+                        mobileCard.classList.add('mobile-card');
+                        // console.log(mobileCard)
+
+                        const image = document.createElement('img');
+                        image.src = `${mobile.image}`;
+                        image.alt = mobile.name;
+
+                        const title = document.createElement('h3');
+                        title.textContent = mobile.name;
+
+                        const description = document.createElement('p');
+                        description.textContent = mobile.description;
+
+                        mobileCard.appendChild(image);
+                        mobileCard.appendChild(title);
+                        mobileCard.appendChild(description);
+
+                        mobilesContainer.appendChild(mobileCard);
+                    });
+                })
+                .catch(error => console.error('Error fetching mobiles:', error));
+        });
+    </script>
+</body>
+
+</html>

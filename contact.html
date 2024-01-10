@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Contact Us</title>
+</head>
+
+<body>
+    <header>
+        <h1>Mobile Paradise</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login/Signup</a></li>
+                <li><a class="active-page" href="contact.html">Contact Us</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="contact-content">
+        <div class="contact-card">
+            <h2>Contact Us</h2>
+            <div class="contact-form form">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Your Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+
+                <button onclick="contact()">Send Message</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Mobile Paradise. All rights reserved.</p>
+    </footer>
+    <script>
+        function contact() {
+            const nameInput = document.getElementById('name').value;
+            const emailInput = document.getElementById('email').value;
+            const messageInput = document.getElementById('message').value;
+
+            fetch('http://localhost:5000/api/contactus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: nameInput,
+                        email: emailInput,
+                        message: messageInput
+                    }),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Message sent successful');
+                    } else {
+                        alert('Error occured. Please try again.');
+                    }
+                })
+                .catch(error => console.error('Error during message sending', error));
+        }
+    </script>
+</body>
+
+</html>

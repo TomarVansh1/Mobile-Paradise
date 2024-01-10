@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Login/Signup</title>
+</head>
+
+<body>
+    <header>
+        <h1>Mobile Paradise</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a class="active-page" href="login.html">Login/Signup</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="login-content">
+        <div id="welcome-message" style="display: none;">
+            <p>Welcome, <span id="username-display"></span>!</p>
+            <button onclick="logout()">Logout</button>
+        </div>
+        <div class="login-card">
+            <div id="login-form">
+                <h2>Login</h2>
+                <div class="form">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+
+                    <button onclick="login()">Login</button>
+                </div>
+            </div>
+        </div>
+        <div class="login-card">
+            <div id="signup-form">
+                <h2>Signup</h2>
+                <div class="form">
+                    <label for="new-username">Username:</label>
+                    <input type="text" id="new-username" name="new-username" placeholder="Username" required>
+
+                    <label for="new-password">Password:</label>
+                    <input type="password" id="new-password" name="new-password" placeholder="Password" required>
+
+                    <label for="confirm-password">Confirm Password:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+
+                    <button onclick="signup()">Signup</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Mobile Paradise. All rights reserved.</p>
+    </footer>
+    <script>
+        function login() {
+
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+
+            if (!usernameInput || !passwordInput) {
+                console.error('Error: Unable to find username or password input elements');
+                return false;
+            }
+
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+            console.log(username)
+            console.log(password)
+            fetch('http://localhost:5000/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username,
+                        password
+                    }),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Login successful');
+                        // window.location.href = 'index.html';
+                        // Unhide the welcome message and set the username
+                        const welcomeMessage = document.getElementById('welcome-message');
+                        const usernameDisplay = document.getElementById('username-display');
+
+                        if (welcomeMessage && usernameDisplay) {
+                            welcomeMessage.style.display = 'block';
+                            usernameDisplay.textContent = username;
+                        }
+                    } else {
+                        alert('Invalid credentials');
+                    }
+                    return false
+                })
+                .catch(error => console.error('Error during login:', error));
+            return false
+        }
+
+        function signup() {
+            const newUsernameInput = document.getElementById('new-username');
+            const newPasswordInput = document.getElementById('new-password');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+
+            if (!newUsernameInput || !newPasswordInput || !confirmPasswordInput) {
+                console.error('Error: Unable to find new-username, new-password, or confirm-password input elements');
+                return;
+            }
+
+            const newUsername = newUsernameInput.value;
+            const newPassword = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            fetch('http://localhost:5000/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: newUsername,
+                        password: newPassword
+                    }),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Signup successful');
+                    } else {
+                        alert('Error during signup. Please try again.');
+                    }
+                })
+                .catch(error => console.error('Error during signup:', error));
+        }
+
+        function logout() {
+            const welcomeMessage = document.getElementById('welcome-message');
+            const usernameDisplay = document.getElementById('username-display');
+
+            if (welcomeMessage && usernameDisplay) {
+                welcomeMessage.style.display = 'none';
+                usernameDisplay.textContent = username;
+            }
+        }
+    </script>
+</body>
+
+</html>
