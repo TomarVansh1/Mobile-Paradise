@@ -35,7 +35,7 @@
             const mobilesContainer = document.getElementById('mobile-grid');
 
             // Fetch mobiles data from the API
-            fetch('http://localhost:5000/api/mobiles')
+            fetch('https://mobileparadisebackend.onrender.com/api/mobiles')
                 .then(response => response.json())
                 .then(mobiles => {
                     console.log(mobiles)
